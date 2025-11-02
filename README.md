@@ -1,66 +1,172 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Helpdesk Ticketing System (Laravel 10)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A web-based Helpdesk Ticketing System built with Laravel 10.  
+This system allows users to create and submit support tickets, while support staff can view, update, and track ticket statuses efficiently.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 1. Overview
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+This project demonstrates a basic implementation of a helpdesk system using the Laravel framework.  
+It includes CRUD operations, database relationships, and a clear workflow for users and support staff.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 2. Features
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- Users can create new support tickets (Hardware, Software, or Network).
+- Support team can view, edit, and update ticket statuses.
+- Ticket logs are automatically recorded in the database.
+- Responsive and minimalist interface using Blade templates and CSS.
+- Integrated with MySQL through Laravel’s Eloquent ORM.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 3. System Requirements
 
-## Laravel Sponsors
+Before running this project, make sure the following components are installed:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- PHP 8.1 or higher  
+- Composer 2.x or higher  
+- MySQL or MariaDB  
+- XAMPP / Laragon / Localhost  
+- Visual Studio Code (recommended)
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## 4. Installation and Setup
 
-## Contributing
+Follow these steps to set up and run the project locally:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+# 1. Clone or download the repository
+git clone https://github.com/<your-username>/helpdesk-laravel.git
+cd helpdesk-laravel
 
-## Code of Conduct
+# 2. Install Laravel dependencies
+composer install
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# 3. Copy the example environment file
+cp .env.example .env
 
-## Security Vulnerabilities
+# 4. Generate the Laravel application key
+php artisan key:generate
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# 5. Create a database in phpMyAdmin (e.g., helpdesk_db)
+# Then update your .env file:
+# DB_DATABASE=helpdesk_db
+# DB_USERNAME=root
+# DB_PASSWORD=
 
-## License
+# 6. Run migrations and seeders
+php artisan migrate --seed
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# 7. Start the Laravel development server
+php artisan serve
+
+Open your browser and visit:
+http://127.0.0.1:8000/tickets 
+```
+---
+
+## 5. Database Structure (ERD Overview)
+
+The project includes four main tables:
+
+Table              Description
+users              Stores user and support account information
+categories         Contains ticket categories
+tickets            Stores ticket details such as title, description, and status
+tickets_logs       Record ticket status changes and notes
+
+Relationships:
+- One user can create many tickets (1:N)
+- One category can have many tickets (1:N)
+- One ticket can have multiple logs (1:N)
+
+---
+
+## 6. Project Structure
+
+```bash
+helpdesk-laravel/
+├── app/
+│   ├── Http/Controllers/        # Contains SupportTicketController
+│   ├── Models/                  # Eloquent models
+│   └── ...
+├── resources/
+│   └── views/tickets/           # Blade templates (index.blade.php, create.blade.php)
+├── public/css/style.css         # Custom CSS for page styling
+├── routes/web.php               # Route definitions
+├── database/migrations/         # Database schema migrations
+├── .env.example                 # Example configuration file
+└── README.md                    # Project documentation
+```
+
+---
+
+## 7. Usage Flow
+
+For Users:
+
+1. Access /tickets to view existing tickets.
+2. Click “Buat Ticket Baru” to create a new ticket.
+3. Fill in User ID, Category, Title, and Description.
+4. Submit the form to save the ticket.
+
+For Support Team:
+
+1. Access /support/tickets to view all tickets.
+2. Update the ticket status (Open, On Progress, Resolved, Closed).
+3. Add optional notes for progress tracking.
+4. All updates are logged automatically in ticket_logs.
+
+---
+
+## 8. Common Artisan Commands
+
+```bash
+# Run local server
+php artisan serve
+
+# Refresh database with seed data
+php artisan migrate:fresh --seed
+
+# Clear caches
+php artisan cache:clear
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
+```
+
+---
+
+## 9. Testing and Access
+
+To test the system:
+- Use User IDs 2–5 (regular users)
+- Add a support user manually in the users table with the role “support”
+
+---
+
+## 10. License
+
+This project is open-source under the MIT License.
+You are free to use, modify, and distribute it for learning or development purposes.
+
+---
+
+## 11. Author and Credits
+
+Author: Denada Putrisia
+Position Tested: IT Developer – Technical Test (Helpdesk Laravel Project)
+Date: November 2025
+
+Tools Used:
+- Laravel 10 (PHP Framework)
+- MySQL (Database)
+- Visual Studio Code (IDE)
+- XAMPP (Localhost Server)
+- Git & GitHub (Version Control)
+
+---

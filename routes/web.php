@@ -1,17 +1,31 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\Ticket;
+use App\Models\Category;
 use App\Http\Controllers\TicketController;
-use App\Http\Controllers\Support\TicketController as SupportTicketController;
+use App\Http\Controllers\SupportTicketController;
 
-// Route untuk user biasa
-Route::middleware(['auth'])->group(function () {
-    Route::get('/tickets', [TicketController::class, 'index']);
-    Route::post('/tickets', [TicketController::class, 'store']);
-});
+// Halaman form buat tiket
+Route::get('/tickets/create', [TicketController::class, 'create'])->name('tickets.create');
 
-// Route untuk IT Support
-Route::prefix('support')->middleware(['auth'])->group(function () {
-    Route::get('/tickets', [SupportTicketController::class, 'index']);
-    Route::patch('/tickets/{ticket}', [SupportTicketController::class, 'updateStatus']);
-});
+// Simpan data form (pakai method store yang sama)
+Route::post('/tickets', [TicketController::class, 'store'])->name('tickets.store');
+
+// Halaman daftar tiket (sederhana: tampilkan semua)
+Route::get('/tickets', function () {
+    $tickets = Ticket::with('category')->latest()->get();
+    return view('tickets.index', compact('tickets'));
+})->name('tickets.index');
+
+// Halaman support: daftar semua tiket
+Route::get('/support/tickets', [SupportTicketController::class, 'index'])
+    ->name('support.tickets.index');
+
+// Update status tiket oleh tim support
+Route::patch('/support/tickets/{ticket}', [SupportTicketController::class, 'update'])
+    ->name('support.tickets.update');
+
+Route::get('/', function () {
+    return view('welcome');
+});    

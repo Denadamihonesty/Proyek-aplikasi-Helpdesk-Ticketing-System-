@@ -14,6 +14,11 @@ class TicketController extends Controller
         return Ticket::with('category','user')->latest()->get();
     }
 
+    public function create()
+    {
+        return view('tickets.create');
+    }
+
     // create tiket (status Open + log awal)
     public function store(Request $r)
     {
@@ -34,9 +39,12 @@ class TicketController extends Controller
             'updated_by'  => $data['user_id'],
         ]);
 
-        return response()->json([
-    'message' => 'Ticket created successfully!',
-    'ticket' => $t
-]);
+        return $r->wantsJson()
+    ? response()->json([
+        'message' => 'Ticket created successfully!',
+        'ticket' => $t
+    ])
+    : redirect()->route('tickets.index')
+        ->with('success', 'Ticket created successfully!');
     }
 }
